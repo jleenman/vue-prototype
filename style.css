@@ -1,0 +1,107 @@
+body {
+    text-align: right;
+    padding: 2em;
+  }
+  .modal {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 2em;
+    padding: 1em;
+    background: lightgrey;
+    text-align: initial;
+    box-shadow: 0 0 1em grey;
+    overflow: scroll;
+  }
+  .tabs {
+    list-style: none;
+    padding: 0;
+    display: flex;
+  }
+  .tabs li {
+    cursor: pointer;
+    padding: 0.5em 1em;
+    border: 1px solid black;
+  }
+  .tabs li:not(:first-child) {
+    border-left: 0;
+  }
+  
+
+  form label {
+    line-height:1.6;
+    cursor:pointer;
+  }
+  form input {
+    padding: .5em 1em;
+  }
+  form label:has(+input[required]):after {
+    content:"*";
+  }
+  form input {
+    border: 2px solid lightgrey;
+    border-radius: 3px;
+  }
+  form input[required]:placeholder-shown {
+  /* required & empty */
+    border: 2px solid grey;
+  }
+  form input:not(:placeholder-shown):invalid:focus {
+  /*  filled & invalid */
+  /*   border: 2px solid red; */
+    outline: none;
+    box-shadow: 0 0 1px 3px rgba(255,0,0,.5);
+  }
+  form input:not(:placeholder-shown):invalid:not(:focus) {
+    border: 2px solid  rgba(255,0,0,.5);
+  }
+  form input:not(:placeholder-shown):valid {
+  /* filled & valid OR not required */
+    border: 2px solid lightgrey;
+  }
+  form:invalid input[type=submit] {
+    border: 2px solid lightgrey;
+    background: lightgrey;
+    color: grey;
+    cursor: not-allowed;
+  }
+  form:valid input[type=submit] {
+    border: 2px solid grey;
+    background: lightgrey;
+    color: black;
+    cursor: pointer;
+  }
+  
+  /* default styles */
+  body {
+    font-family: sans-serif;
+  }
+
+.row {
+    display:flex;
+    flex-direction:row;
+    margin-bottom: 1em;
+  }
+.column {
+    display: flex;
+    flex-direction: column;
+}
+.grow {
+    flex-grow: 1;
+}
+.align_end {
+    align-items: flex-end;
+}
+.justify_end {
+    justify-content: flex-end;
+}
+
+li.disabled {
+    color:grey;
+}
+.box {
+    padding: 1em;
+    border: 1px solid grey;
+}

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Suneti protype</title>
+  <script type="text/javascript" src="https://unpkg.com/vue@3"></script>
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+<body>
+  
+  <div id="app">
+
+    <button @click.prevent="openModal">+ Company</button>
+
+    <div v-if=modal class=modal>
+      <form>
+
+        <ul class="tabs">
+          <li @click.prevent="selectTab('algemeen')">1. Algemeen</li>
+          <li @click.prevent="selectTab('contact')">2. Contactgegevens</li>
+          <li @click.prevent="selectTab('facturatie')"
+            :class="(debiteur!=true&&crediteur!=true) && 'disabled'">3. Financieel</li>
+        </ul>
+
+        <fieldset v-if="tab==='algemeen'">
+          <legend>Algemeen</legend>
+
+          <div class=row>
+            <div class="column grow">
+              <label for="companyname">Bedrijfnaam</label>
+              <input id="companyname" type="text" placeholder="e.g. Shell plc" required pattern="[^0-9]*" v-model="companyname">
+            </div>
+            <div class="column">
+              <label for="id">ID</label>
+              <input id="id" type="text" disabled v-model="id">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="column grow">
+              <label for="opmerkingen">Opmerkingen / Notities</label>
+              <textarea name="" id="opmerkingen" cols="30" rows="10"></textarea>
+            </div>
+          </div>
+
+          <div class="row">
+            
+            <input type="checkbox" name="debiteur" id="debiteur" v-model="debiteur">
+            <label for="debiteur">Debiteur</label>
+            
+            <input type="checkbox" name="crediteur" id="crediteur" v-model="crediteur">
+            <label for="crediteur">Crediteur</label>
+            
+            <input type="checkbox" name="scheepseigenaar" id="scheepseigenaar" v-model="scheepseigenaar">
+            <label for="scheepseigenaar">Scheepseigenaar</label>
+            
+            <input type="checkbox" name="controleur" id="controleur" v-model="controleur">
+            <label for="controleur">Controleur</label>
+            
+            <input type="checkbox" name="agent" id="agent" v-model="agent">
+            <label for="agent">Agent</label>
+
+          </div>
+
+        </fieldset>
+
+        <fieldset v-if="tab==='contact'">
+          <legend>Contactgegevens</legend>
+          <div class="row">
+            <div class="column">
+              <h3>Email adressen</h3>
+            </div>
+            <div class="column grow">
+              <div class="email row align_end box" v-for="i in emailadressen">
+                <div class="column grow">
+                  <label :for="'mail'+i.id">email</label>
+                  <input :id="'mail'+i.id" type="email" v-model="i.mail" placeholder="mail@example.com" required>
+                </div>
+                <div class="column grow">
+                  <label :for="'m-label'+i.id">label</label>
+                  <input :id="'m-label'+i.id" type="text" v-model="i.label">
+                </div>
+                <div class="column">
+                  <button @click.prevent="removeMail(i.id)">X</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row grow justify_end">
+            <button @click.prevent="addMail">Voeg toe</button>
+          </div>
+
+          <div class="row">
+            <div class="column">
+              <h3>Telefoonnummers</h3>
+            </div>
+            <div class="column grow">
+              <div class="telefoon row align_end box" v-for="i in telefoonnummers">
+                <div class="column">
+                </div>
+                <div class="column">
+                  <label :for="'telcc'+i.id">Land</label>
+                  <input :id="'telcc'+i.id" type="text" v-model="i.land" placeholder="NL (+31)" required>
+                </div>
+                <div class="column grow">
+                  <label :for="'tel'+i.id">telefoonnummer</label>
+                  <input :id="'tel'+i.id" type="tel" v-model="i.tel" placeholder="0612345678" required>
+                </div>
+                <div class="column grow">
+                  <label :for="'t-label'+i.id">label</label>
+                  <input :id="'t-label'+i.id" type="text" v-model="i.label">
+                </div>
+                <div class="column">
+                  <button @click.prevent="removeTel(i.id)">X</button>
+                </div>
+              </div>
+              </div>
+          </div>
+          <div class="row justify_end">
+            <button @click.prevent="addTel">Voeg toe</button>
+          </div>
+
+
+          <div class="row">
+            <div class="column">
+              <h3>Adresgegevens</h3>
+            </div>
+            <div class="column grow">
+              <div class="adressen box" v-for="i in adressen">
+                <div class="row align_end">
+                  <div class="column grow">
+                    <label :for="'adres1_'+i.id">Adres 1</label>
+                    <input :id="'adres1_'+i.id" type="text" v-model="i.adres1" placeholder="straatnaam + huisnr." required>    
+                  </div>
+                  <div class="column grow">
+                    <label :for="'adres2_'+i.id">Adres 2</label>
+                    <input :id="'adres2_'+i.id" type="text" v-model="i.adres2">    
+                  </div>
+                </div>
+                <div class="row align_end">
+                  <div class="column grow">
+                    <label :for="'postcode'+i.id">Postcode</label>
+                    <input :id="'postcode'+i.id" type="text" v-model="i.postcode" placeholder="1234AB" required>
+                  </div>
+                  <div class="column grow">
+                    <label :for="'plaats'+i.id">Plaats</label>
+                    <input :id="'plaats'+i.id" type="text" v-model="i.plaats" placeholder="plaatsnaam" required>
+                  </div>
+                </div>
+                <div class="row align_end">
+                  <div class="column grow">
+                    <label :for="'land'+i.id">Land</label>
+                    <input :id="'land'+i.id" type="text" v-model="i.land" placeholder="land" required>
+                  </div>
+                  <div class="column grow">
+                    <label :for="'a-label'+i.id">Label</label>
+                    <input :id="'a-label'+i.id" type="text" v-model="i.label">
+                  </div>
+                </div>
+                <button @click.prevent="removeAddress(i.id)">X</button>
+              </div>
+            </div>
+          </div>
+          <div class="row justify_end">
+            <button @click.prevent="addAddress">Voeg toe</button>
+          </div>
+
+
+        </fieldset>
+
+        <fieldset v-if="tab==='facturatie'&&(debiteur===true||crediteur===true)">
+          <legend>Financieel</legend>
+          <div class="row">
+            <div class="column">
+              <h3>Algemeen</h3>
+            </div>
+            <div class="column grow">
+              <div class="row">
+                <div class="column grow">
+                  <label for="kvk">KVK nummer</label>
+                  <input id="kvk" type="text" >
+                </div>
+                <div class="column grow">
+                  <label for="btw">BTW nummer</label>
+                  <input id="btw" type="text" >
+                </div>
+              </div>
+              <div class="row">
+                <div class="column">
+                  <label for="bic">BIC</label>
+                  <input id="bic" type="text" >
+                </div>
+                <div class="column grow">
+                  <label for="iban">IBAN nummer</label>
+                  <input id="iban" type="text" >
+                </div>
+              </div>
+              <div class="row">
+                <div class="column grow">
+                  <label for="nomination">Nomination instructions</label>
+                  <textarea name="" id="nomination" cols="30" rows="10"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="column">
+              <h3>Facturatie</h3>
+            </div>
+            <div class="column grow">
+              <div class="row">
+                <div class="column grow">
+                  <label for="BTWcode">BTW code</label>
+                  <input id="BTWcode" type="text" >
+                </div>
+                <div class="column grow">
+                  <label for="layout">Layout code</label>
+                  <input id="layout" type="text" >
+                </div>
+                <div class="column grow">
+                  <label for="payment">Terms of payment</label>
+                  <input id="payment" type="text" >
+                </div>
+              </div>
+              <div class="row">
+                <label for="conditions">Order conditions</label>
+                <input id="conditions" type="text" >
+              </div>
+              <div class="row">
+                <input type="checkbox" name="digitaal" id="digitaal" v-model="digitaal">
+                <label for="digitaal">Digitale facturatie?</label>
+              </div>
+              <div class="row" v-if="digitaal===false">
+                <label for="kopieen">Aantal kopieen</label>
+                <input id="kopieen" type="number" >
+              </div>
+              <div class="row" v-if="digitaal===true">
+                <div class="column grow">
+                  <label for="factuurmail">Facturatie e-mail</label>
+                  <input id="factuurmail" type="email" placeholder="mail@example.com" required>
+                </div>
+                <div class="column">
+                  <label for="type">Factuur type</label>
+                  <input id="type" type="text" >
+                </div>
+              </div>
+
+            </div>
+          </div>
+          
+
+
+
+
+        </fieldset>
+
+        <input type="submit">
+        <button @click.prevent="closeModal">Annuleren</button>
+      </form>
+    </div>
+
+    <p>{{companyname}}</p>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
