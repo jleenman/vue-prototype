@@ -32,6 +32,7 @@
             <div class="column grow">
               <label for="companyname">Bedrijfnaam</label>
               <input id="companyname" type="text" placeholder="e.g. Shell plc" required pattern="[^0-9]*" v-model="companyname">
+              <div class="note">dev note: cijfers zijn invalide</div>
             </div>
             <div class="column">
               <label for="id">ID</label>
@@ -70,7 +71,7 @@
         <fieldset v-if="tab==='contact'">
           <legend>Contactgegevens</legend>
           <div class="row">
-            <div class="column">
+            <div class="column header">
               <h3>Email adressen</h3>
             </div>
             <div class="column grow">
@@ -94,7 +95,7 @@
           </div>
 
           <div class="row">
-            <div class="column">
+            <div class="column header">
               <h3>Telefoonnummers</h3>
             </div>
             <div class="column grow">
@@ -125,7 +126,7 @@
 
 
           <div class="row">
-            <div class="column">
+            <div class="column header">
               <h3>Adresgegevens</h3>
             </div>
             <div class="column grow">
@@ -160,7 +161,18 @@
                     <input :id="'a-label'+i.id" type="text" v-model="i.label">
                   </div>
                 </div>
-                <button @click.prevent="removeAddress(i.id)">X</button>
+                <div class="row">
+                  <div class="column grow">
+                    <div v-if="debiteur===true||crediteur===true">
+                      <input type="checkbox" name="factuuradres" id="factuuradres" v-model="i.factuuradres">
+                      <label for="factuuradres">Gebruik als factuuradres</label>
+                      <div class="note">dev note: gekoppeld aan factuuradres op tabblad factuur</div>
+                    </div>
+                  </div>
+                  <div class="column align_end">
+                    <button @click.prevent="removeAddress(i.id)">X</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -174,7 +186,7 @@
         <fieldset v-if="tab==='facturatie'&&(debiteur===true||crediteur===true)">
           <legend>Financieel</legend>
           <div class="row">
-            <div class="column">
+            <div class="column header">
               <h3>Algemeen</h3>
             </div>
             <div class="column grow">
@@ -207,7 +219,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="column">
+            <div class="column header">
               <h3>Facturatie</h3>
             </div>
             <div class="column grow">
@@ -226,8 +238,21 @@
                 </div>
               </div>
               <div class="row">
-                <label for="conditions">Order conditions</label>
-                <input id="conditions" type="text" >
+                <div class="column">
+                  <label for="conditions">Order conditions</label>
+                  <input id="conditions" type="text" >
+                </div>
+                <div class="column grow">
+                  <div class="column grow" v-if="adressen.length===0">
+                    <p style="color:red;">Voeg minimaal één adres toe voor de factuur</p>
+                  </div>
+                  <div class="column grow" v-else>
+                    <label for="selectfactuuradres">Factuuradres</label>
+                    <input id="selectfactuuradres" type="text" placeholder="Selecteer factuuradres" >
+
+                    <div class="note">dev note: gekoppeld aan addressen op tabblad contactgegevens</div>
+                  </div>
+                </div>
               </div>
               <div class="row">
                 <input type="checkbox" name="digitaal" id="digitaal" v-model="digitaal">
@@ -250,14 +275,10 @@
 
             </div>
           </div>
-          
-
-
-
-
+   
         </fieldset>
 
-        <input type="submit">
+        <input type="submit" value="opslaan">
         <button @click.prevent="closeModal">Annuleren</button>
       </form>
     </div>

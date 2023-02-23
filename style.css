@@ -87,6 +87,10 @@ body {
 .column {
     display: flex;
     flex-direction: column;
+    margin-left:1em;
+}
+.column:first-child {
+  margin-left:0;
 }
 .grow {
     flex-grow: 1;
@@ -104,4 +108,13 @@ li.disabled {
 .box {
     padding: 1em;
     border: 1px solid grey;
+}
+.header {
+  min-width: 25%;
+}
+.note {
+  display: inline-block;
+  background-color: beige;
+  color:grey;
+  margin:2px;
 }
